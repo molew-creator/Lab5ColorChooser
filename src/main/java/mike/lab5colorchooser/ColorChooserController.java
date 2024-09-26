@@ -1,5 +1,8 @@
 package mike.lab5colorchooser;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.Property;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -7,6 +10,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 public class ColorChooserController {
     // instance variables for interacting with GUI components
@@ -28,14 +33,27 @@ public class ColorChooserController {
 
     public void initialize() {
         // bind TextField values to corresponding Slider values
-        redTextField.textProperty().bind(
-                redSlider.valueProperty().asString("%.0f"));
-        greenTextField.textProperty().bind(
-                greenSlider.valueProperty().asString("%.0f"));
-        blueTextField.textProperty().bind(
-                blueSlider.valueProperty().asString("%.0f"));
-        alphaTextField.textProperty().bind(
-                alphaSlider.valueProperty().asString("%.2f"));
+//        redTextField.textProperty().bind(
+//                redSlider.valueProperty().asString("%.0f"));
+//        greenTextField.textProperty().bind(
+//                greenSlider.valueProperty().asString("%.0f"));
+//        blueTextField.textProperty().bind(
+//                blueSlider.valueProperty().asString("%.0f"));
+//        alphaTextField.textProperty().bind(
+//                alphaSlider.valueProperty().asString("%.2f"));
+
+
+        //creating a StringConverter object to be able to create a binding between the text fields and sliders
+        StringConverter<Number> converter = new NumberStringConverter();
+
+        //using the Bindings class's bindBidirectional() method to bind the text fields and sliders together
+        Bindings.bindBidirectional(redTextField.textProperty(), redSlider.valueProperty(), converter);
+
+        Bindings.bindBidirectional(blueTextField.textProperty(), blueSlider.valueProperty(), converter);
+
+        Bindings.bindBidirectional(greenTextField.textProperty(), greenSlider.valueProperty(), converter);
+
+        Bindings.bindBidirectional(alphaTextField.textProperty(), alphaSlider.valueProperty(), converter);
 
         // listeners that set Rectangle's fill based on Slider changes
         redSlider.valueProperty().addListener(
